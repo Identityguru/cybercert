@@ -293,6 +293,38 @@ code { font-family: var(--font-mono); font-size: 0.875em; background: var(--bg-c
 .info-table td:first-child { color: var(--text-muted); width: 140px; }
 .text-muted { color: var(--text-muted); }
 
+/* ── Registration extras ──────────────────────────────────────────────── */
+.auth-card--wide { max-width: 480px; }
+.required { color: var(--red); font-size: 0.8em; }
+
+.input-with-toggle { position: relative; }
+.input-with-toggle input { width: 100%; padding-right: 2.5rem; }
+.toggle-pw {
+  position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; font-size: 1rem;
+  color: var(--text-muted); padding: 0;
+}
+.toggle-pw:hover { color: var(--text); }
+
+.pw-strength {
+  font-size: 0.75rem; font-weight: 600; margin-top: 0.35rem; height: 1rem;
+  transition: color 0.2s;
+}
+.strength-weak  { color: var(--red); }
+.strength-fair  { color: var(--yellow); }
+.strength-good  { color: var(--blue); }
+.strength-strong{ color: var(--green); }
+
+.pw-rules { background: var(--bg-card-alt); border-radius: var(--radius); padding: 0.75rem 1rem; font-size: 0.8rem; }
+.pw-rules-title { color: var(--text-muted); margin-bottom: 0.4rem; }
+.pw-rules ul { display: flex; flex-direction: column; gap: 0.25rem; list-style: none; }
+.pw-rules li { color: var(--text-muted); padding-left: 1.25rem; position: relative; }
+.pw-rules li::before { content: '○'; position: absolute; left: 0; }
+.pw-rules li.rule-ok  { color: var(--green); }
+.pw-rules li.rule-ok::before  { content: '✓'; }
+.pw-rules li.rule-fail { color: var(--red); }
+.pw-rules li.rule-fail::before { content: '✗'; }
+
 /* ── Footer ───────────────────────────────────────────────────────────── */
 .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 1rem 2rem; }
 .footer-inner { display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; color: var(--text-muted); }

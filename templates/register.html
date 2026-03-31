@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Register — CyberCert{% endblock %}
+{% block title %}Create Account — CyberCert{% endblock %}
 
 {% block content %}
 <div class="auth-container">
-  <div class="auth-card">
+  <div class="auth-card auth-card--wide">
     <div class="auth-header">
       <span class="auth-icon">🛡️</span>
       <h1 class="auth-title">Create Account</h1>
@@ -11,37 +11,81 @@
     </div>
 
     {% if success %}
+    <!-- ── Success state ───────────────────────────────────────────────── -->
     <div class="alert alert-success">
       <strong>Account created!</strong>
-      We've sent an activation email to <strong>{{ email }}</strong>.
-      Check your inbox and click the link to activate your account.
+      Welcome, {{ first_name }}. You can now sign in with your email and password.
     </div>
-    <div class="auth-footer">
-      <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-block">Go to Sign In</a>
-    </div>
+    <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-block" style="margin-top:1rem;">
+      Sign In Now →
+    </a>
 
     {% else %}
+    <!-- ── Form ───────────────────────────────────────────────────────── -->
 
     {% if error %}
     <div class="alert alert-error">{{ error }}</div>
     {% endif %}
 
-    <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+    <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form" id="register-form" novalidate>
+
       <div class="form-row">
         <div class="form-group">
-          <label for="first_name">First Name</label>
-          <input type="text" id="first_name" name="first_name" required placeholder="Jane" />
+          <label for="first_name">First Name <span class="required">*</span></label>
+          <input type="text" id="first_name" name="first_name"
+                 value="{{ form.first_name or '' }}"
+                 required placeholder="Jane" autocomplete="given-name" />
         </div>
         <div class="form-group">
-          <label for="last_name">Last Name</label>
-          <input type="text" id="last_name" name="last_name" required placeholder="Smith" />
+          <label for="last_name">Last Name <span class="required">*</span></label>
+          <input type="text" id="last_name" name="last_name"
+                 value="{{ form.last_name or '' }}"
+                 required placeholder="Smith" autocomplete="family-name" />
         </div>
       </div>
+
       <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required placeholder="jane@company.com" />
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input type="email" id="email" name="email"
+               value="{{ form.email or '' }}"
+               required placeholder="jane@company.com" autocomplete="email" />
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+
+      <div class="form-group">
+        <label for="password">Password <span class="required">*</span></label>
+        <div class="input-with-toggle">
+          <input type="password" id="password" name="password"
+                 required placeholder="Min 8 chars, upper, lower, number"
+                 autocomplete="new-password"
+                 oninput="checkStrength(this.value)" />
+          <button type="button" class="toggle-pw" onclick="togglePw('password')" tabindex="-1">👁</button>
+        </div>
+        <div class="pw-strength" id="pw-strength" aria-live="polite"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm_password">Confirm Password <span class="required">*</span></label>
+        <div class="input-with-toggle">
+          <input type="password" id="confirm_password" name="confirm_password"
+                 required placeholder="Repeat password"
+                 autocomplete="new-password" />
+          <button type="button" class="toggle-pw" onclick="togglePw('confirm_password')" tabindex="-1">👁</button>
+        </div>
+      </div>
+
+      <div class="pw-rules">
+        <p class="pw-rules-title">Password requirements:</p>
+        <ul>
+          <li id="rule-len">At least 8 characters</li>
+          <li id="rule-upper">At least one uppercase letter</li>
+          <li id="rule-lower">At least one lowercase letter</li>
+          <li id="rule-digit">At least one number</li>
+        </ul>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
+        Create Account
+      </button>
     </form>
 
     <div class="auth-footer">
@@ -50,4 +94,36 @@
     {% endif %}
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function togglePw(fieldId) {
+  const input = document.getElementById(fieldId);
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function checkStrength(pw) {
+  const rules = {
+    'rule-len':   pw.length >= 8,
+    'rule-upper': /[A-Z]/.test(pw),
+    'rule-lower': /[a-z]/.test(pw),
+    'rule-digit': /[0-9]/.test(pw),
+  };
+
+  let passed = 0;
+  for (const [id, ok] of Object.entries(rules)) {
+    const el = document.getElementById(id);
+    el.classList.toggle('rule-ok', ok);
+    el.classList.toggle('rule-fail', pw.length > 0 && !ok);
+    if (ok) passed++;
+  }
+
+  const bar = document.getElementById('pw-strength');
+  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+  const classes = ['', 'strength-weak', 'strength-fair', 'strength-good', 'strength-strong'];
+  bar.textContent = pw.length > 0 ? labels[passed] : '';
+  bar.className = 'pw-strength ' + (pw.length > 0 ? classes[passed] : '');
+}
+</script>
 {% endblock %}
