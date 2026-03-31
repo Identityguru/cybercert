@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}CyberCert — Okta Professional Certification{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Phase 1 — Okta Professional</div>
+    <h1 class="hero-title">Master the <span class="accent">Okta Certified Professional</span> Exam</h1>
+    <p class="hero-subtitle">
+      Structured study guides, practice quizzes, and progress tracking — built for the
+      Okta Certified Professional Hands-On Configuration Exam (OIE).
+    </p>
+    <div class="hero-actions">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Get Started</a>
+      <a href="{{ url_for('auth.register') }}" class="btn btn-outline btn-lg">Create Account</a>
+    </div>
+  </div>
+</section>
+
+<section class="topics-preview">
+  <div class="container">
+    <h2 class="section-title">10 Core Exam Topics</h2>
+    <p class="section-subtitle">Comprehensive coverage of every topic on the Okta Professional exam.</p>
+    <div class="topic-grid">
+      <div class="topic-card-preview">
+        <span class="topic-icon">👤</span>
+        <span>User Lifecycle States</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">📋</span>
+        <span>Policy Evaluation Order</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">🔑</span>
+        <span>SAML vs OIDC</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">🛡️</span>
+        <span>Admin Roles</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">👥</span>
+        <span>Group Types &amp; Rules</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">🗂️</span>
+        <span>Universal Directory</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">🔄</span>
+        <span>SCIM Provisioning</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">🔍</span>
+        <span>ThreatInsight</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">🔐</span>
+        <span>Passwordless Factors</span>
+      </div>
+      <div class="topic-card-preview">
+        <span class="topic-icon">📜</span>
+        <span>System Log</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <h3>Structured Study Guides</h3>
+        <p>Detailed content sections with key points and exam tips, drawn from the official Okta Professional Study Guide.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <h3>Practice Quizzes</h3>
+        <p>Multiple-choice questions with instant feedback and detailed explanations for every answer.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <h3>Progress Tracking</h3>
+        <p>Track which topics you've studied and your best quiz scores across every session.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

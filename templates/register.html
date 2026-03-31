@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Register — CyberCert{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <span class="auth-icon">🛡️</span>
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-subtitle">Start your Okta Professional certification journey.</p>
+    </div>
+
+    {% if success %}
+    <div class="alert alert-success">
+      <strong>Account created!</strong>
+      We've sent an activation email to <strong>{{ email }}</strong>.
+      Check your inbox and click the link to activate your account.
+    </div>
+    <div class="auth-footer">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-block">Go to Sign In</a>
+    </div>
+
+    {% else %}
+
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="first_name">First Name</label>
+          <input type="text" id="first_name" name="first_name" required placeholder="Jane" />
+        </div>
+        <div class="form-group">
+          <label for="last_name">Last Name</label>
+          <input type="text" id="last_name" name="last_name" required placeholder="Smith" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="jane@company.com" />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a></p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

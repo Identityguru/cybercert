@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Quizzes — CyberCert{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>✅ Practice Quizzes</h1>
+    <p class="page-subtitle">Test your knowledge on each Okta Professional topic.</p>
+  </div>
+
+  <div class="topic-grid">
+    {% for topic in topics %}
+    <div class="topic-card">
+      <div class="topic-card-top">
+        <span class="topic-icon">{{ topic.icon }}</span>
+        {% if topic.best_score is not none %}
+          <span class="badge {% if topic.best_score >= 80 %}badge-success{% elif topic.best_score >= 60 %}badge-warning{% else %}badge-error{% endif %}">
+            {{ topic.best_score }}%
+          </span>
+        {% else %}
+          <span class="badge badge-neutral">Not taken</span>
+        {% endif %}
+      </div>
+      <h3 class="topic-card-title">{{ topic.title }}</h3>
+      <p class="topic-card-desc">{{ topic.question_count }} questions</p>
+      <div class="topic-card-actions">
+        <a href="{{ url_for('quiz.take', topic_slug=topic.slug) }}" class="btn btn-primary btn-sm">
+          {% if topic.best_score is not none %}Retake{% else %}Start{% endif %}
+        </a>
+        <a href="{{ url_for('study.topic', topic_slug=topic.slug) }}" class="btn btn-ghost btn-sm">Study</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

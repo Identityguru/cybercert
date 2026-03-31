@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Quiz: {{ topic.title }} — CyberCert{% endblock %}
+
+{% block content %}
+<div class="container container--narrow">
+
+  <nav class="breadcrumb">
+    <a href="{{ url_for('quiz.index') }}">Quizzes</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>{{ topic.title }}</span>
+  </nav>
+
+  <div class="page-header">
+    <h1>{{ topic.icon }} {{ topic.title }}</h1>
+    <p class="page-subtitle">{{ questions | length }} questions · Select one answer per question</p>
+  </div>
+
+  <div id="quiz-container">
+    {% for q in questions %}
+    {% set q_index = loop.index0 %}
+    <div class="question-block" data-index="{{ q_index }}">
+      <p class="question-text"><strong>Q{{ loop.index }}.</strong> {{ q.q }}</p>
+      <div class="options">
+        {% for option in q.options %}
+        <label class="option-label">
+          <input type="radio" name="q{{ q_index }}" value="{{ loop.index0 }}" class="option-radio" data-q="{{ q_index }}" data-opt="{{ loop.index0 }}" />
+          <span class="option-text">{{ option }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="quiz-actions">
+      <button id="submit-btn" class="btn btn-primary btn-lg" disabled>Submit Quiz</button>
+      <span id="answer-progress" class="text-muted">0 / {{ questions | length }} answered</span>
+    </div>
+  </div>
+
+  <!-- Results panel (hidden until submit) -->
+  <div id="results-panel" style="display:none;"></div>
+
+</div>
+
+<script>
+  const QUESTIONS_DATA = {{ questions_json | safe }};
+  const TOPIC_SLUG = {{ topic_slug | tojson }};
+  const SUBMIT_URL = "{{ url_for('quiz.submit', topic_slug=topic_slug) }}";
+  const RESULTS_BASE = "{{ url_for('quiz.index') }}".replace('/quiz', '/quiz/results/');
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

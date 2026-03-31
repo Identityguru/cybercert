@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — CyberCert{% endblock %}
+
+{% block content %}
+{% set user = current_user() %}
+<div class="container">
+  <div class="page-header">
+    <h1>Welcome back, {{ user.given_name }} 👋</h1>
+    <p class="page-subtitle">Okta Certified Professional — Hands-On Configuration Exam (OIE)</p>
+  </div>
+
+  <!-- Progress Summary -->
+  <div class="progress-summary">
+    <div class="progress-stat">
+      <span class="stat-value">{{ viewed_count }}</span>
+      <span class="stat-label">Topics Studied</span>
+    </div>
+    <div class="progress-stat">
+      <span class="stat-value">{{ total_topics - viewed_count }}</span>
+      <span class="stat-label">Remaining</span>
+    </div>
+    <div class="progress-stat">
+      <span class="stat-value">{{ progress_pct }}%</span>
+      <span class="stat-label">Study Progress</span>
+    </div>
+  </div>
+
+  <div class="progress-bar-container">
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: {{ progress_pct }}%"></div>
+    </div>
+    <span class="progress-label">{{ viewed_count }} / {{ total_topics }} topics read</span>
+  </div>
+
+  <!-- Topic Cards -->
+  <h2 class="section-title mt-lg">Study Topics</h2>
+  <div class="topic-grid dashboard-grid">
+    {% for topic in topics %}
+    <div class="topic-card {% if topic.viewed %}topic-card--viewed{% endif %}">
+      <div class="topic-card-top">
+        <span class="topic-icon">{{ topic.icon }}</span>
+        {% if topic.viewed %}
+          <span class="badge badge-success">Read</span>
+        {% else %}
+          <span class="badge badge-neutral">Not started</span>
+        {% endif %}
+      </div>
+      <h3 class="topic-card-title">{{ topic.title }}</h3>
+      <p class="topic-card-desc">{{ topic.description }}</p>
+      <div class="topic-card-meta">
+        <span class="meta-time">⏱ {{ topic.estimated_minutes }} min</span>
+        {% if topic.best_score is not none %}
+          <span class="meta-score {% if topic.best_score >= 80 %}score-good{% elif topic.best_score >= 60 %}score-ok{% else %}score-low{% endif %}">
+            Quiz: {{ topic.best_score }}%
+          </span>
+        {% endif %}
+      </div>
+      <div class="topic-card-actions">
+        <a href="{{ url_for('study.topic', topic_slug=topic.slug) }}" class="btn btn-primary btn-sm">
+          {% if topic.viewed %}Review{% else %}Study{% endif %}
+        </a>
+        <a href="{{ url_for('quiz.take', topic_slug=topic.slug) }}" class="btn btn-ghost btn-sm">Quiz</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

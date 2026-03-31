@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ topic.title }} — CyberCert{% endblock %}
+
+{% block content %}
+<div class="container container--reading">
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a href="{{ url_for('study.index') }}">Study Guide</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>{{ topic.title }}</span>
+  </nav>
+
+  <div class="topic-header">
+    <div class="topic-header-left">
+      <span class="topic-icon-lg">{{ topic.icon }}</span>
+      <div>
+        <h1 class="topic-title">{{ topic.title }}</h1>
+        <p class="topic-meta">⏱ {{ topic.estimated_minutes }} min read
+          {% if best_score is not none %}
+          · Quiz best: <span class="{% if best_score >= 80 %}score-good{% elif best_score >= 60 %}score-ok{% else %}score-low{% endif %}">{{ best_score }}%</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+    <a href="{{ url_for('quiz.take', topic_slug=topic_slug) }}" class="btn btn-primary">Take Quiz →</a>
+  </div>
+
+  <!-- Summary -->
+  <div class="topic-summary">
+    <p>{{ topic.summary }}</p>
+  </div>
+
+  <!-- Content Sections -->
+  {% for section in topic.sections %}
+  <div class="content-section">
+    <h2 class="section-heading">{{ section.heading }}</h2>
+    <p class="section-body">{{ section.body }}</p>
+    {% if section.key_points %}
+    <ul class="key-points">
+      {% for point in section.key_points %}
+      <li>{{ point }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <!-- Exam Tips -->
+  {% if topic.exam_tips %}
+  <div class="exam-tips">
+    <h2>🎯 Exam Tips</h2>
+    <ul class="tips-list">
+      {% for tip in topic.exam_tips %}
+      <li>{{ tip }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- Navigation -->
+  <div class="topic-nav">
+    {% if prev_slug %}
+    <a href="{{ url_for('study.topic', topic_slug=prev_slug) }}" class="btn btn-ghost">← Previous Topic</a>
+    {% else %}
+    <span></span>
+    {% endif %}
+
+    <a href="{{ url_for('quiz.take', topic_slug=topic_slug) }}" class="btn btn-primary">Take Quiz →</a>
+
+    {% if next_slug %}
+    <a href="{{ url_for('study.topic', topic_slug=next_slug) }}" class="btn btn-ghost">Next Topic →</a>
+    {% else %}
+    <a href="{{ url_for('study.index') }}" class="btn btn-ghost">All Topics</a>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

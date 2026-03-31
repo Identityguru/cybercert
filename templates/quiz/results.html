@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Quiz Results — CyberCert{% endblock %}
+
+{% block content %}
+<div class="container container--narrow">
+
+  <nav class="breadcrumb">
+    <a href="{{ url_for('quiz.index') }}">Quizzes</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="{{ url_for('quiz.take', topic_slug=topic_slug) }}">{{ topic.title }}</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Results</span>
+  </nav>
+
+  <!-- Score Card -->
+  <div class="score-card {% if attempt.score_pct >= 80 %}score-card--pass{% elif attempt.score_pct >= 60 %}score-card--ok{% else %}score-card--fail{% endif %}">
+    <div class="score-badge">{{ attempt.score_pct }}%</div>
+    <div class="score-detail">
+      <h2>{{ topic.icon }} {{ topic.title }}</h2>
+      <p>{{ attempt.correct_count }} / {{ attempt.total_questions }} correct</p>
+      {% if attempt.score_pct >= 80 %}
+        <p class="score-verdict score-good">Excellent! You're well-prepared on this topic.</p>
+      {% elif attempt.score_pct >= 60 %}
+        <p class="score-verdict score-ok">Good effort. Review the explanations below.</p>
+      {% else %}
+        <p class="score-verdict score-low">Keep studying! Focus on the topics you missed.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Question Review -->
+  <h2 class="section-title mt-lg">Question Review</h2>
+  {% for item in detailed %}
+  <div class="review-block {% if item.correct %}review-block--correct{% else %}review-block--wrong{% endif %}">
+    <div class="review-header">
+      <span class="review-icon">{% if item.correct %}✅{% else %}❌{% endif %}</span>
+      <p class="review-question"><strong>Q{{ loop.index }}.</strong> {{ item.q }}</p>
+    </div>
+    <div class="review-options">
+      {% for option in item.options %}
+      <div class="review-option
+        {% if loop.index0 == item.answer %}review-option--correct{% endif %}
+        {% if loop.index0 == item.chosen and not item.correct %}review-option--wrong{% endif %}
+      ">
+        {% if loop.index0 == item.answer %}✓ {% elif loop.index0 == item.chosen and not item.correct %}✗ {% else %}   {% endif %}{{ option }}
+      </div>
+      {% endfor %}
+    </div>
+    {% if item.explanation %}
+    <div class="review-explanation">
+      <strong>Explanation:</strong> {{ item.explanation }}
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <!-- Actions -->
+  <div class="topic-nav mt-lg">
+    <a href="{{ url_for('quiz.take', topic_slug=topic_slug) }}" class="btn btn-primary">Retake Quiz</a>
+    <a href="{{ url_for('study.topic', topic_slug=topic_slug) }}" class="btn btn-ghost">Study This Topic</a>
+    <a href="{{ url_for('quiz.index') }}" class="btn btn-ghost">All Quizzes</a>
+  </div>
+
+</div>
+{% endblock %}

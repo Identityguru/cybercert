@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Sign In — CyberCert{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <span class="auth-icon">🛡️</span>
+      <h1 class="auth-title">Sign In</h1>
+      <p class="auth-subtitle">Continue your Okta Professional exam preparation.</p>
+    </div>
+
+    {% if okta_configured == False %}
+    <div class="alert alert-warning">
+      <strong>Okta not configured.</strong>
+      Copy <code>.env.example</code> to <code>.env</code> and set your
+      <code>OKTA_DOMAIN</code>, <code>OKTA_CLIENT_ID</code>, and <code>OKTA_CLIENT_SECRET</code>.
+    </div>
+    {% else %}
+    <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-block">
+      Sign in with Okta
+    </a>
+    {% endif %}
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

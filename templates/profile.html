@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Profile — CyberCert{% endblock %}
+
+{% block content %}
+{% set user = current_user() %}
+<div class="container container--narrow">
+  <div class="page-header">
+    <h1>Your Profile</h1>
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-avatar">{{ user.given_name[0] | upper }}{{ user.family_name[0] | upper if user.family_name }}</div>
+    <div class="profile-info">
+      <h2>{{ user.name }}</h2>
+      <p class="profile-email">{{ user.email }}</p>
+      <p class="profile-sub"><code>{{ user.sub }}</code></p>
+    </div>
+  </div>
+
+  <div class="info-block">
+    <h3>Account Details</h3>
+    <table class="info-table">
+      <tr><td>Name</td><td>{{ user.name }}</td></tr>
+      <tr><td>Email</td><td>{{ user.email }}</td></tr>
+      <tr><td>Okta Subject</td><td><code>{{ user.sub }}</code></td></tr>
+    </table>
+  </div>
+
+  <div class="info-block">
+    <h3>Certification Path</h3>
+    <p>Phase 1: <strong>Okta Certified Professional</strong> (OIE)</p>
+    <p class="text-muted">More certifications coming in future phases.</p>
+  </div>
+</div>
+{% endblock %}
