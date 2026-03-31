@@ -59,6 +59,7 @@ def create_app(config_class: type = Config) -> Flask:
     # ── Jinja globals ──────────────────────────────────────────────────────
     from .auth.decorators import current_user
     app.jinja_env.globals["current_user"] = current_user
+    app.jinja_env.globals["recaptcha_site_key"] = app.config["RECAPTCHA_SITE_KEY"]
 
     # ── Logging ────────────────────────────────────────────────────────────
     _configure_logging(app)

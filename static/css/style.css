@@ -325,6 +325,8 @@ code { font-family: var(--font-mono); font-size: 0.875em; background: var(--bg-c
 .pw-rules li.rule-fail { color: var(--red); }
 .pw-rules li.rule-fail::before { content: '✗'; }
 
+.recaptcha-wrap { display: flex; justify-content: center; margin: 0.5rem 0; }
+
 /* ── Footer ───────────────────────────────────────────────────────────── */
 .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 1rem 2rem; }
 .footer-inner { display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; color: var(--text-muted); }

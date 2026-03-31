@@ -21,6 +21,11 @@ class Config:
     OKTA_CLIENT_SECRET: str = os.environ.get("OKTA_CLIENT_SECRET", "")
     OKTA_API_TOKEN: str = os.environ.get("OKTA_API_TOKEN", "")
 
+    # Google reCAPTCHA v2 — https://www.google.com/recaptcha/admin/create
+    # Leave blank to disable (registration form will skip verification)
+    RECAPTCHA_SITE_KEY: str = os.environ.get("RECAPTCHA_SITE_KEY", "")
+    RECAPTCHA_SECRET_KEY: str = os.environ.get("RECAPTCHA_SECRET_KEY", "")
+
     # Application
     ADMIN_EMAIL: str = os.environ.get("ADMIN_EMAIL", "")
     APP_NAME: str = "CyberCert"

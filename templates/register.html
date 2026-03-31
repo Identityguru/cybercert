@@ -83,6 +83,12 @@
         </ul>
       </div>
 
+      {% if recaptcha_site_key %}
+      <div class="recaptcha-wrap">
+        <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" data-theme="dark"></div>
+      </div>
+      {% endif %}
+
       <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
         Create Account
       </button>
@@ -97,6 +103,9 @@
 {% endblock %}
 
 {% block scripts %}
+{% if recaptcha_site_key %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endif %}
 <script>
 function togglePw(fieldId) {
   const input = document.getElementById(fieldId);

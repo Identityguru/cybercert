@@ -104,6 +104,11 @@ def register():
     if error:
         return render_template("register.html", error=error, success=False, form=form)
 
+    # ── reCAPTCHA verification ─────────────────────────────────────────────
+    captcha_error = _verify_recaptcha(request.form.get("g-recaptcha-response", ""))
+    if captcha_error:
+        return render_template("register.html", error=captcha_error, success=False, form=form)
+
     api_token   = current_app.config["OKTA_API_TOKEN"]
     okta_domain = current_app.config["OKTA_DOMAIN"]
 
@@ -184,6 +189,33 @@ def _validate(first_name, last_name, email, password, confirm_password) -> str |
         return "Password must contain at least one number."
     if password != confirm_password:
         return "Passwords do not match."
+    return None
+
+
+def _verify_recaptcha(token: str) -> str | None:
+    """Verify a reCAPTCHA v2 token. Returns an error string or None on success.
+    Skipped silently if RECAPTCHA_SECRET_KEY is not configured."""
+    secret = current_app.config["RECAPTCHA_SECRET_KEY"]
+    if not secret:
+        return None  # reCAPTCHA not configured — skip verification
+
+    if not token:
+        return "Please complete the CAPTCHA verification."
+
+    try:
+        resp = http_requests.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data={"secret": secret, "response": token},
+            timeout=10,
+        )
+        result = resp.json()
+        if not result.get("success"):
+            logger.warning("reCAPTCHA failed: %s", result.get("error-codes"))
+            return "CAPTCHA verification failed. Please try again."
+    except Exception as exc:
+        logger.error("reCAPTCHA request error: %s", exc)
+        return "CAPTCHA verification could not be completed. Please try again."
+
     return None
 
 
